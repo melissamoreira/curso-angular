@@ -1,0 +1,11 @@
+<div class="jumbotron">
+    <h1 class="text-center">Alurapic</h1>
+</div>
+<div class="container">
+    <!-- Componentes Foto abaixo, recebendo parâmetros 'url' e 'titulo'
+    
+       <foto url="img/leao.jpg" titulo="Leão"></foto>
+       <foto url="img/leao-branco.jpg" titulo="Leão Branco"></foto> -->
+   
+   <foto *ngFor="let foto of fotos" url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
+</div>
