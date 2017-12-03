@@ -1,11 +1,4 @@
-<div class="jumbotron">
-    <h1 class="text-center">Alurapic</h1>
-</div>
-<div class="container">
-    <!-- Componentes Foto abaixo, recebendo parâmetros 'url' e 'titulo'
-    
-       <foto url="img/leao.jpg" titulo="Leão"></foto>
-       <foto url="img/leao-branco.jpg" titulo="Leão Branco"></foto> -->
-   
-   <foto *ngFor="let foto of fotos" url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
-</div>
+<router-outlet></router-outlet>
+<!-- Elemento que receberá os componentes carregados condicionalmente por meio das rotas. -->
+
+<!-- A diretiva router-outlet indica o local em que os componentes carregados pelo sistema de rotas do Angular devem ser inseridos dentro de um template. Em nosso caso, como AppComponent passou a ser o primeiro componente a ser carregado em nossa aplicação, é em seu template que usamos a diretiva router-outlet. -->

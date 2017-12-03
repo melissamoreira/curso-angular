@@ -16,14 +16,27 @@ var app_component_1 = require('./app.component');
 var foto_module_1 = require('./foto/foto.module');
 var http_1 = require('@angular/http');
 // HttpModule é um módulo que já possui um provider do http configurado, pronto para ser injetado
+var painel_module_1 = require('./painel/painel.module');
+var cadastro_component_1 = require('./cadastro/cadastro.component');
+var listagem_component_1 = require('./listagem/listagem.component');
+//Import do arquivo de rotas da aplicação
+var app_routes_1 = require('./app.routes');
 //Um módulo anotado com NgModule pode importar outros módulos anotados com o NgModule
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule, foto_module_1.FotoModule, http_1.HttpModule],
-            declarations: [app_component_1.AppComponent],
+            imports: [
+                platform_browser_1.BrowserModule,
+                foto_module_1.FotoModule,
+                http_1.HttpModule,
+                painel_module_1.PainelModule,
+                app_routes_1.routing],
+            declarations: [
+                app_component_1.AppComponent,
+                cadastro_component_1.CadastroComponent,
+                listagem_component_1.ListagemComponent],
             bootstrap: [app_component_1.AppComponent] // O primeiro componente a ser carregado no módulo
         }), 
         __metadata('design:paramtypes', [])

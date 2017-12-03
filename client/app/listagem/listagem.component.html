@@ -1,0 +1,39 @@
+<!-- Passamos todo o conteúdo inicial de AppComponent para ListagemComponent -->
+<div class="jumbotron">
+    <h1 class="text-center">Alurapic</h1>
+</div>
+    
+<div class="container">
+
+    <div class="row">
+            <div class="col-md-12">
+                <form>
+                     <div class="input-group">
+                        <span class="input-group-btn">
+
+                            <!-- A diretiva RouterLink carrega o componente dinamicamente e impede que a aplicação inteira seja recarregada, como faz o padrão href. -->
+                            <a [routerLink]="['/cadastro']" class="btn btn-primary">
+                                Nova foto
+                            </a>
+                            s
+                        </span>
+                    </div> 
+                </form>
+            </div> <!-- fim col-md-12 -->
+        </div> <!-- fim row -->
+        <br>
+
+    <div class="row">
+        
+        <!-- O component Painel recebe o component Foto como conteúdo e,
+             agora, o ngFor realiza a repetição sobre o Painel -->
+    
+       <painel *ngFor="let foto of fotos" titulo="{{foto.titulo}}"
+                class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+                <!-- O Painel recebe classes do Bootstrap normalmente -->
+    
+            <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
+       </painel>
+    </div>
+
+</div>
