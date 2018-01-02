@@ -10,6 +10,7 @@ export class FotoComponent {
     
     //A notação @Input define que esses parâmetros serão recebidos como atributos no seletor
     //'Inbound properties', isto é, aceitam receber dados através do decorator @Input()
-    @Input() titulo;
-    @Input() url;
+    @Input() titulo: string;
+    @Input() url: string;
+    descricao: string;
 }

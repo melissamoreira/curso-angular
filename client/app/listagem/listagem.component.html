@@ -15,8 +15,17 @@
                             <a [routerLink]="['/cadastro']" class="btn btn-primary">
                                 Nova foto
                             </a>
-                            s
                         </span>
+                        
+                        <!-- Campo para filtrar pelo título -->
+                        <input #textoProcurado (keyup)="0" class="form-control" placeholder="Filtrar pelo título da foto">
+                        
+                        <!-- 
+                            #textoProcurado é uma variável local, assim, é acessível dentro deste template. 
+                        
+                            O keyup entre parenteses representa o event binding, a sintaxe do Angular para a associação de eventos. Este é um pequeno hack para que o Angular atualize a tela a cada tecla digitada no campo, por isso o evento keyup. O valor "0" não realiza nenhuma ação, equivale ao "false". 
+                        -->
+                        
                     </div> 
                 </form>
             </div> <!-- fim col-md-12 -->
@@ -28,10 +37,12 @@
         <!-- O component Painel recebe o component Foto como conteúdo e,
              agora, o ngFor realiza a repetição sobre o Painel -->
     
-       <painel *ngFor="let foto of fotos" titulo="{{foto.titulo}}"
+       <painel *ngFor="let foto of fotos | filtroPorTitulo:textoProcurado.value" titulo="{{foto.titulo | uppercase }}"
                 class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
-                <!-- O Painel recebe classes do Bootstrap normalmente -->
-    
+        
+        <!-- O pipe 'uppercase', no atributo titulo, aplica o estilo ao dado.
+            Já no painel, o pipe que criamos 'filtroPorTitulo' realiza uma filtrazem na lista de fotos, com base no valor do campo #textoProcurado, que foi inserido acima. -->
+        
             <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
        </painel>
     </div>
