@@ -11,6 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var FotoComponent = (function () {
     function FotoComponent() {
+        //A notação @Input define que esses parâmetros serão recebidos como atributos no seletor
+        //'Inbound properties', isto é, aceitam receber dados através do decorator @Input()
+        this.titulo = '';
+        this.url = '';
+        this.descricao = '';
     }
     __decorate([
         core_1.Input(), 

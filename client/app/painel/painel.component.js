@@ -12,6 +12,18 @@ var core_1 = require("@angular/core");
 var PainelComponent = (function () {
     function PainelComponent() {
     }
+    //Recebe o título via input
+    /*
+        Se tentássemos realizar a operação abaixo dentro do construtor, ocorreria um erro.
+        O problema é que toda property com o decorator Input só recebe os dados associados à propriedade depois da chamada do construtor. Sendo assim, quando tentássemos manipular o título ele ainda estaria undefined.
+
+        A solução do problema mora no entendimento de que componentes em Angular2 possuem ciclos de vida, um deles é chamado de OnInit. Nele, o componente é iniciado, mas só depois das inbound properties terem sido atribuídas, como é o caso do título do nosso painel
+    */
+    PainelComponent.prototype.ngOnInit = function () {
+        this.titulo = this.titulo.length > 7
+            ? this.titulo.substr(0, 7) + '...'
+            : this.titulo;
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', String)

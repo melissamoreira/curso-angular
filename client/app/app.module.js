@@ -9,18 +9,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 require('rxjs/add/operator/map');
-//Importando a extensão map do rxjs
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var app_component_1 = require('./app.component');
 var foto_module_1 = require('./foto/foto.module');
 var http_1 = require('@angular/http');
-// HttpModule é um módulo que já possui um provider do http configurado, pronto para ser injetado
 var painel_module_1 = require('./painel/painel.module');
 var cadastro_component_1 = require('./cadastro/cadastro.component');
 var listagem_component_1 = require('./listagem/listagem.component');
-//Import do arquivo de rotas da aplicação
 var app_routes_1 = require('./app.routes');
+var forms_1 = require('@angular/forms');
 //Um módulo anotado com NgModule pode importar outros módulos anotados com o NgModule
 var AppModule = (function () {
     function AppModule() {
@@ -32,7 +30,8 @@ var AppModule = (function () {
                 foto_module_1.FotoModule,
                 http_1.HttpModule,
                 painel_module_1.PainelModule,
-                app_routes_1.routing],
+                app_routes_1.routing,
+                forms_1.FormsModule],
             declarations: [
                 app_component_1.AppComponent,
                 cadastro_component_1.CadastroComponent,
