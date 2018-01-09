@@ -11,22 +11,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var foto_component_1 = require('../foto/foto.component');
 var http_1 = require('@angular/http');
+var forms_1 = require('@angular/forms');
+//Import das classes FormGroup, que representa um grupo de campos, FormBuilder, que permite criar instâncias de FormGroup e Validators que permite realizar as validações
 var CadastroComponent = (function () {
-    //Cria uma propriedade http do tipo Http na classe
-    function CadastroComponent(http) {
+    /*
+        Angular nos permite agrupar vários campos (FormControl) dentro de um grupo (FormGroup). Essa maneira de agrupar controles é interessante, porque podemos perguntar ao grupo se ele esta válido (se todos os controles estão válidos) ou se é inválido (se um dos controles for inválido).
+    */
+    function CadastroComponent(http, fb) {
+        //Injetando as classes Http e FormBuilder em instâncias
         this.foto = new foto_component_1.FotoComponent();
         this.http = http;
+        //Utilizando o método group do FormBuilder fb é possível criar a validação para um ou mais campos
+        this.meuForm = fb.group({
+            titulo: ['', forms_1.Validators.compose([forms_1.Validators.required, forms_1.Validators.minLength(4)])],
+            url: ['', forms_1.Validators.required],
+            descricao: ['']
+        });
+        /*
+            Veja que o método group recebe um objeto JavaScript onde a chave é o identificador do campo e seu valor um array com configurações de validação. Usamos a chave titulo para indicar que estamos validando o campo título e assim por diante. O identificador do campo corresponde ao atributo 'formControlName' inserido diretamente no template.
+
+            IMPORTANTE: Mesmo os campos que não possuirão validação devem constar no obj em group, e também devem possuir o atributo 'formControlName'!
+         */
+        /*
+            Utilizando o método compose() de Validators, é possível definir mais de um validador para o campo. No caso de titulo, foi aplicado o required e um minLentgh de 4 caracteres. */
     }
     CadastroComponent.prototype.cadastrar = function (event) {
         var _this = this;
-        event.preventDefault(); //Evita o submit do form
+        event.preventDefault();
         console.log(this.foto);
-        // cria uma instância de Headers
         var headers = new http_1.Headers;
-        // Adiciona o tipo de conteúdo application/json
         headers.append('Content-type', 'application/json');
-        //Abaixo, no método post do http, o primeiro parâmetro é a URL da requisição, o segundo é o objeto de dados a ser inserido via post, devidamente parseado para Json, e o terceiro é o objeto de configuração do header da requisição.
-        //Muita atenção, porque não passamos nosso objeto headers diretamente. Passamos um objeto de configuração com a propriedade headers que o contém como valor.
         this.http.post('v1/fotos', JSON.stringify(this.foto), { headers: headers })
             .subscribe(function () {
             _this.foto = new foto_component_1.FotoComponent();
@@ -39,7 +53,7 @@ var CadastroComponent = (function () {
             selector: 'cadastro',
             templateUrl: './cadastro.component.html'
         }), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, forms_1.FormBuilder])
     ], CadastroComponent);
     return CadastroComponent;
 }());

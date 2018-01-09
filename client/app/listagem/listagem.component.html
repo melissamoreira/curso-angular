@@ -38,7 +38,7 @@
              agora, o ngFor realiza a repetição sobre o Painel -->
     
        <painel *ngFor="let foto of fotos | filtroPorTitulo:textoProcurado.value" titulo="{{foto.titulo | uppercase }}"
-                class="col-md-2 col-lg-2 col-sm-2 col-xs-2">
+                class="col-md-2 col-lg-2 col-sm-2 col-xs-4">
         
         <!-- O pipe 'uppercase', no atributo titulo, aplica o estilo ao dado.
             Já no painel, o pipe que criamos 'filtroPorTitulo' realiza uma filtrazem na lista de fotos, com base no valor do campo #textoProcurado, que foi inserido acima. -->

@@ -1,39 +1,50 @@
 <div class="container">
 
-        <!--  Validação de formulário orientada a template:  -->
-        
-        <!-- Todo o form é atribuído à variável local #meuForm, por meio do ngForm -->
-        <form #meuForm="ngForm" class="row" (submit)="cadastrar($event)">
+        <!--  Validação de formulário orientada a modelo:  -->
+    
+    <div class="col-md-6">
 
-            <div class="col-md-6">
+        <!-- Utilizamos a diretiva formGroup para associar o formulário ao formGroup 'meuForm', criado no componente. -->
+        <form [formGroup]="meuForm" class="row" (submit)="cadastrar($event)">
+
+            
                 <div class="form-group">
                     <label>Título</label>                    
                     <input
                         required
-                        #titulo="ngModel"
                         [(ngModel)]="foto.titulo" 
+                        formControlName="titulo"
                         name="titulo"
                         class="form-control"  
                         autocomplete="off">
-                    <span *ngIf="titulo.invalid" class="form-control alert-danger">
-                        Título obrigatório.
-                    </span>
+                    
+                    <div *ngIf="!meuForm.controls.titulo.valid"  
+                         class="form-control alert-danger">
+                        <span *ngIf="meuForm.controls.titulo.errors.required">
+                            Título obrigatório.
+                        </span>
+                        <span *ngIf="meuForm.controls.titulo.errors.minlength">
+                              O título deve conter no mínimo 4 caracteres.
+                      </span>
+                    </div>
+
                 </div>
 
                 <!-- 
-                    Nos campos titulo e url foram criadas variáveis locais e atribuídas o valor de ngModel em cada um destes campos. Analisando o valor destas variáveis, podemos utilizar o condicional *ngIf, que exibe o conteúdo em que foi adicionado, caso a instrução seja verdadeira, nesse caso, o campo inválido.
+                    Nos campos titulo e url foram adicionados o atributo 'formControlName' que identifica o campo dentro do formGroup. Dentro do *ngIf utilizaremos a verificação 'meuForm.controls.<campo>.invalid', para verificar se <campo> dentro de meuForm está inválido.
                 -->
 
                 <div class="form-group">
                     <label>URL</label>
                     <input
-                        required
-                        #url="ngModel"
+                        required                      
                         [(ngModel)]="foto.url"
+                        formControlName="url"
                         name="url"
                         class="form-control"  
                         autocomplete="off">
-                    <span *ngIf="url.invalid" class="form-control alert-danger">
+                    <span *ngIf="meuForm.controls.url.invalid" 
+                          class="form-control alert-danger">
                             URL obrigatória.
                         </span>
                 </div>
@@ -42,6 +53,7 @@
                     <label>Descrição</label>
                     <textarea
                         [(ngModel)]="foto.descricao"
+                        formControlName="descricao"
                         name="descricao"
                         class="form-control"  
                         autocomplete="off">
@@ -50,13 +62,22 @@
     
                 <button type="submit" 
                         class="btn btn-primary" 
-                        [disabled]="meuForm.form.invalid">
+                        [disabled]="meuForm.invalid">
                     Salvar
                 </button>
-                <!-- Acima, utilizando uma diretiva no atributo disabled, utilizamos a propriedade form em #meuForm para verificar se este está valido ou não. Se não estiver, o botão é desabilitado. --> 
+                <!-- Acima, utilizando uma diretiva no atributo disabled, utilizamos a propriedade 'meuForm' de nosso componente para verificar se este está valido ou não. Se não estiver, o botão é desabilitado. --> 
 
                  <a [routerLink]="['']" class="btn btn-primary">Voltar</a>
                 <hr>
-            </div>
+            
         </form>
     </div>
+
+    <!-- Exibindo em tempo real os dados inseridos -->
+    <div class="col-md-6">
+        <h1>{{foto.titulo}}</h1>
+        <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
+        <p>{{foto.descricao}}</p>
+    </div>
+
+</div>
