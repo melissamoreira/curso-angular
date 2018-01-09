@@ -1,51 +1,41 @@
 <div class="container">
 
-        <!-- Abaixo ocorre o Event Binding do submit ao método cadastrar.
-             O $event é um objeto do Angular que encapsula o evento que esta sendo disparado.
-
-             Importante: Event Binding com () flui da view para o model, com [] flui do model para a view. 
-             Apesar de possuírem um fluxo diferente, ambas são unidirecionais. -->
-             
-        <form class="row" (submit)="cadastrar($event)">
-
-            <!--
-
-                "Mas como nosso template saberá que deve chamar o método cadastrar do nosso componente a partir do evento submit? Como o template está associado ao componente, ele procurará na classe CadastroComponent, ou seja, o componente é o seu contexto."
-
-            -->
+        <!--  Validação de formulário orientada a template:  -->
+        
+        <!-- Todo o form é atribuído à variável local #meuForm, por meio do ngForm -->
+        <form #meuForm="ngForm" class="row" (submit)="cadastrar($event)">
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label>Título</label>
-                    <!--
-                    
-                    <input (input)="foto.titulo = $event.target.value"
-                           [value]="foto.titulo" 
-                           class="form-control" 
-                           autocomplete="off">
-
-                        Acima, ocorre o data binding de eventos (event data binding), unidirecional também, mas que flui da view para os dados. Ele é caracterizado por parênteses que envolvem o nome do evento que desejamos executar.
-
-                    -->
-
+                    <label>Título</label>                    
                     <input
+                        required
+                        #titulo="ngModel"
                         [(ngModel)]="foto.titulo" 
                         name="titulo"
                         class="form-control"  
                         autocomplete="off">
+                    <span *ngIf="titulo.invalid" class="form-control alert-danger">
+                        Título obrigatório.
+                    </span>
                 </div>
 
-                    <!-- 
-                        Nestes campos, usaremos algo semelhante ao "two-way data binding", com a diretiva [(ngModel)]. Ela envia os dados da view para o model, e do model para a view, num fluxo bi-direcional. Mas para utilizar o ngModel é preciso definir o atributo name do campo ou utilizar a diretiva [ngModelOptions]="{standalone: true}". É necessário também importar o módulo 'FormsModule' em AppModule.
-                    -->
+                <!-- 
+                    Nos campos titulo e url foram criadas variáveis locais e atribuídas o valor de ngModel em cada um destes campos. Analisando o valor destas variáveis, podemos utilizar o condicional *ngIf, que exibe o conteúdo em que foi adicionado, caso a instrução seja verdadeira, nesse caso, o campo inválido.
+                -->
 
                 <div class="form-group">
                     <label>URL</label>
                     <input
+                        required
+                        #url="ngModel"
                         [(ngModel)]="foto.url"
                         name="url"
                         class="form-control"  
                         autocomplete="off">
+                    <span *ngIf="url.invalid" class="form-control alert-danger">
+                            URL obrigatória.
+                        </span>
                 </div>
 
                 <div class="form-group">
@@ -58,9 +48,12 @@
                     </textarea>
                 </div>
     
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" 
+                        class="btn btn-primary" 
+                        [disabled]="meuForm.form.invalid">
                     Salvar
                 </button>
+                <!-- Acima, utilizando uma diretiva no atributo disabled, utilizamos a propriedade form em #meuForm para verificar se este está valido ou não. Se não estiver, o botão é desabilitado. --> 
 
                  <a [routerLink]="['']" class="btn btn-primary">Voltar</a>
                 <hr>
