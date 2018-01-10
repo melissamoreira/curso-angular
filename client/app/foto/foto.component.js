@@ -11,8 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var FotoComponent = (function () {
     function FotoComponent() {
-        //A notação @Input define que esses parâmetros serão recebidos como atributos no seletor
-        //'Inbound properties', isto é, aceitam receber dados através do decorator @Input()
         this.titulo = '';
         this.url = '';
         this.descricao = '';
@@ -27,10 +25,11 @@ var FotoComponent = (function () {
     ], FotoComponent.prototype, "url", void 0);
     FotoComponent = __decorate([
         core_1.Component({
-            //O moduleId faz com que o componente procure o template relativo à sua pasta.
             moduleId: module.id,
             selector: 'foto',
-            templateUrl: './foto.component.html'
+            templateUrl: './foto.component.html',
+            styleUrls: ['./foto.component.css'],
+            encapsulation: core_1.ViewEncapsulation.Emulated
         }), 
         __metadata('design:paramtypes', [])
     ], FotoComponent);
