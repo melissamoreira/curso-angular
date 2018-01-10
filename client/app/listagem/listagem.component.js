@@ -8,31 +8,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require("@angular/core");
-var http_1 = require("@angular/http"); //Possibilita realizar requisições a serviços
+var core_1 = require('@angular/core');
+var foto_service_1 = require('../foto/foto.service');
+//Import do nosso serviço
 var ListagemComponent = (function () {
-    function ListagemComponent(http) {
+    //O construtor recebe o serviço por parâmetro
+    function ListagemComponent(service) {
         var _this = this;
-        //Passamos todo o conteúdo inicial de AppComponent para ListagemComponent
         this.fotos = [];
-        http.get('v1/fotos')
-            .map(function (res) { return res.json(); })
-            .subscribe(function (fotos) {
-            _this.fotos = fotos;
-            console.log(_this.fotos);
-        }, function (erro) { return console.log(erro); });
+        service.lista()
+            .subscribe(function (fotos) { return _this.fotos = fotos; }, function (erro) { return console.log(erro); });
     }
     ListagemComponent = __decorate([
-        //Possibilita realizar requisições a serviços
         core_1.Component({
             moduleId: module.id,
             selector: 'listagem',
             templateUrl: './listagem.component.html'
         }), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [foto_service_1.FotoService])
     ], ListagemComponent);
     return ListagemComponent;
 }());
 exports.ListagemComponent = ListagemComponent;
-//Listagem não possuirá um modulo próprio pois está atrelado ao AppModule, sendo usado apenas nessa aplicação 
 //# sourceMappingURL=listagem.component.js.map
