@@ -21,12 +21,14 @@ var FotoService = (function () {
         this.headers.append('Content-Type', 'application/json');
     }
     FotoService.prototype.lista = function () {
-        //Retorna um Observable (é possível fazer subscribe) do tipo array de FotoComponent
         return this.http.get(this.url)
             .map(function (res) { return res.json(); });
     };
     FotoService.prototype.cadastra = function (foto) {
         return this.http.post(this.url, JSON.stringify(foto), { headers: this.headers });
+    };
+    FotoService.prototype.remove = function (foto) {
+        return this.http.delete(this.url + "/" + foto._id);
     };
     FotoService = __decorate([
         core_1.Injectable(), 

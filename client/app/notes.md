@@ -133,3 +133,17 @@ ou
 
 
 Repare que é preciso definir o tipo de alguma forma, ou pelo decorator `@Inject(FotoService) service`, ou pela tipagem estática `service: FotoService`.
+
+
+------------------
+
+# Parte2 | Aula 03 - Removendo dados inconsistentes
+
+------------------
+
+# Change Detection
+
+Angular só monitora a *REFERÊNCIA* de **this.fotos** do nosso componente, e não a lista em si. Se alguém incluir ou remover um novo item da lista ele não saberá.  
+Para isso, precisamos criar uma nova lista e atribuir essa lista a this.fotos. 
+        
+Como estamos reatribuindo um valor para a variável o Angular desencadeará seu mecanismo de deteção de mudança *(Change Detection)* e renderizará a view.

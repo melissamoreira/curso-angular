@@ -10,15 +10,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var foto_service_1 = require('../foto/foto.service');
-//Import do nosso serviço
 var ListagemComponent = (function () {
     //O construtor recebe o serviço por parâmetro
     function ListagemComponent(service) {
         var _this = this;
         this.fotos = [];
-        service.lista()
+        this.mensagem = '';
+        this.service = service;
+        this.service.lista()
             .subscribe(function (fotos) { return _this.fotos = fotos; }, function (erro) { return console.log(erro); });
     }
+    ListagemComponent.prototype.remove = function (foto) {
+        //Recebe um FotoComponent e não retorna nenhum valor
+        var _this = this;
+        this.service.remove(foto)
+            .subscribe(function () {
+            var novasFotos = _this.fotos.slice(0);
+            var index = novasFotos.indexOf(foto);
+            novasFotos.splice(index, 1);
+            _this.fotos = novasFotos;
+            _this.mensagem = "Foto removida com sucesso!";
+        }, function (erro) {
+            console.log(erro);
+            _this.mensagem = "Ops! Não foi possível remover a foto.";
+        });
+    };
     ListagemComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
@@ -30,4 +46,11 @@ var ListagemComponent = (function () {
     return ListagemComponent;
 }());
 exports.ListagemComponent = ListagemComponent;
+/*
+        Change Detection
+        ----------------
+        Angular só monitora a REFERÊNCIA de this.fotos do nosso componente, e não a lista em si. Se alguém incluir ou remover um novo item da lista ele não saberá. Para isso, precisamos criar uma nova lista e atribuir essa lista a this.fotos.
+        
+        Como estamos reatribuindo um valor para a variável o Angular desencadeará seu mecanismo de deteção de mudança e renderizará a view.
+    */ 
 //# sourceMappingURL=listagem.component.js.map

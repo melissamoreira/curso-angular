@@ -2,8 +2,12 @@
 <div class="jumbotron">
     <h1 class="text-center">Alurapic</h1>
 </div>
-    
+  
 <div class="container">
+
+    <!-- *ngIf verifica se o tamanho de 'mensagem' é maior que 0, e o exibe se sim. -->
+    <div *ngIf="mensagem.length" class="alert alert-info" role="alert">{{mensagem}}
+    </div>          
 
     <div class="row">
             <div class="col-md-12">
@@ -11,7 +15,6 @@
                      <div class="input-group">
                         <span class="input-group-btn">
 
-                            <!-- A diretiva RouterLink carrega o componente dinamicamente e impede que a aplicação inteira seja recarregada, como faz o padrão href. -->
                             <a [routerLink]="['/cadastro']" class="btn btn-primary">
                                 Nova foto
                             </a>
@@ -19,12 +22,7 @@
                         
                         <!-- Campo para filtrar pelo título -->
                         <input #textoProcurado (keyup)="0" class="form-control" placeholder="Filtrar pelo título da foto">
-                        
-                        <!-- 
-                            #textoProcurado é uma variável local, assim, é acessível dentro deste template. 
-                        
-                            O keyup entre parenteses representa o event binding, a sintaxe do Angular para a associação de eventos. Este é um pequeno hack para que o Angular atualize a tela a cada tecla digitada no campo, por isso o evento keyup. O valor "0" não realiza nenhuma ação, equivale ao "false". 
-                        -->
+
                         
                     </div> 
                 </form>
@@ -40,10 +38,11 @@
        <painel *ngFor="let foto of fotos | filtroPorTitulo:textoProcurado.value" titulo="{{foto.titulo | uppercase }}"
                 class="col-md-2 col-lg-2 col-sm-2 col-xs-4">
         
-        <!-- O pipe 'uppercase', no atributo titulo, aplica o estilo ao dado.
-            Já no painel, o pipe que criamos 'filtroPorTitulo' realiza uma filtrazem na lista de fotos, com base no valor do campo #textoProcurado, que foi inserido acima. -->
-        
             <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
+
+            <!-- O button chama o método remove com o parâmetro 'foto' (variável do ngFor), ao disparar o evento 'click'. -->
+            <button class="btn btn-danger btn-block" 
+                    (click)="remove(foto)">Remover</button>
        </painel>
     </div>
 
