@@ -37,8 +37,9 @@
     
        <painel *ngFor="let foto of fotos | filtroPorTitulo:textoProcurado.value" titulo="{{foto.titulo | uppercase }}"
                 class="col-md-2 col-lg-2 col-sm-2 col-xs-4">
-        
-            <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
+            <a [routerLink]="['/cadastro', foto._id]" >
+                <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
+            </a>
 
             <!-- O button chama o método remove com o parâmetro 'foto' (variável do ngFor), ao disparar o evento 'click'. -->
             <button class="btn btn-danger btn-block" 

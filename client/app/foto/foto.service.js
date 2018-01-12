@@ -10,9 +10,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var http_1 = require('@angular/http');
 var core_1 = require('@angular/core');
-/*
-    Precisamos anotar FotoService com @Injectable, caso contrário Angular não entenderá que deve procurar as dependências do próprio serviço quando for injetá-lo. Além disso, a própria classe precisa ser adicionada como provider no módulo FotoModule para que a injeção funcione.
-*/
 var FotoService = (function () {
     function FotoService(http) {
         this.url = 'v1/fotos';
@@ -25,10 +22,21 @@ var FotoService = (function () {
             .map(function (res) { return res.json(); });
     };
     FotoService.prototype.cadastra = function (foto) {
-        return this.http.post(this.url, JSON.stringify(foto), { headers: this.headers });
+        /*
+            Abaixo, verificamos se a foto já possui id.
+            Se possuir, realizamos o put, senão, realizamos o post.
+        */
+        return (foto._id)
+            ? this.http.put(this.url + '/' + foto._id, JSON.stringify(foto), { headers: this.headers })
+            : this.http.post(this.url, JSON.stringify(foto), { headers: this.headers });
     };
     FotoService.prototype.remove = function (foto) {
         return this.http.delete(this.url + "/" + foto._id);
+    };
+    FotoService.prototype.buscar = function (id) {
+        //Buscando um registro específico por meio do id
+        return this.http.get(this.url + "/" + id)
+            .map(function (res) { return res.json(); });
     };
     FotoService = __decorate([
         core_1.Injectable(), 

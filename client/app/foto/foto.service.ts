@@ -3,10 +3,6 @@ import { FotoComponent } from './foto.component';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-/*
-    Precisamos anotar FotoService com @Injectable, caso contrário Angular não entenderá que deve procurar as dependências do próprio serviço quando for injetá-lo. Além disso, a própria classe precisa ser adicionada como provider no módulo FotoModule para que a injeção funcione.
-*/
-
 @Injectable ()
 export class FotoService {
 
@@ -28,13 +24,31 @@ export class FotoService {
 
     cadastra(foto:FotoComponent): Observable <Response> {
 
-        return this.http.post(
-            this.url, JSON.stringify(foto), { headers: this.headers } 
-        );
+        /* 
+            Abaixo, verificamos se a foto já possui id.
+            Se possuir, realizamos o put, senão, realizamos o post.
+        */
+        return (foto._id)
+
+            ? this.http.put(
+                this.url + '/' + foto._id, JSON.stringify(foto),
+                { headers: this.headers })
+
+            : this.http.post(
+                this.url, JSON.stringify(foto), { headers: this.headers });
+
     }
 
     remove(foto:FotoComponent): Observable<Response> {
         
         return this.http.delete( this.url +  "/" + foto._id );
     }
+
+    buscar(id: string): Observable<FotoComponent> {
+
+        //Buscando um registro específico por meio do id
+        return this.http.get( this.url + "/" + id)
+                        .map( res => res.json());
+    }
+
 }

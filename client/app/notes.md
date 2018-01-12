@@ -147,3 +147,49 @@ Angular só monitora a *REFERÊNCIA* de **this.fotos** do nosso componente, e n�
 Para isso, precisamos criar uma nova lista e atribuir essa lista a this.fotos. 
         
 Como estamos reatribuindo um valor para a variável o Angular desencadeará seu mecanismo de deteção de mudança *(Change Detection)* e renderizará a view.
+
+
+------------------
+
+# Parte2 | Aula 04 - Onde está nossa alteração?
+
+------------------
+
+
+## [routerLink] com parâmetros
+
+Para utilizar parâmetros na diretiva [routerLink], no template, é preciso passar o **array** com a url na pimeira posição, e o parâmetro na segunda posição, como feito abaixo:
+
+    [routerLink]="['/cadastro', foto._id]"
+
+## Alteração de fotos
+
+Muitas vezes, queremos criar rotas parametrizadas. Por exemplo, hoje temos a rota **localhost:3000/cadastro**, mas podemos querer usar a mesma rota passando o ID da foto que desejamos alterar como **localhost:3000/cadastro/12**. Veja que o código da foto é variável, não sabemos de antemão qual é, mas sabemos que ela virá logo após /cadastro.
+
+Podemos parametrizar rotas em Angular, inclusive podemos até obter o parâmetro passado para rota em nossos componentes.
+
+Qual das opções abaixo parametriza a rota /cadastro para que aceite receber um parâmetro que indique o ID da foto? *(OBS: não entramos ainda no mérito de como o ID passado como parâmetro será acessado.)*
+
+
+A resposta é:
+
+    { path: 'cadastro/:id', component: CadastroComponent }
+
+A presença do dois pontos antes do parâmetro é fundamental.
+
+
+## Obtendo parâmetros de rotas
+
+Quando acessamos rotas parametrizadas como */cadastro/:id* podemos ter acesso ao valor do curinga **:id** através do serviço **ActivatedRoute**
+
+> Não confunda o serviço **ActivatedRoute** com **Router**. O primeiro sabe apenas dos parâmetros da rota, o segundo nos permite realizarmos navegações programaticamente. 
+
+
+## Navegação via componente
+
+Para realizar a navegação via componente (e não pelo template), como um redirect, utilizamos o **Router**, import de *'@angular/router'*, por meio do método **navigate()**:
+
+        route: Router; //route é um Router
+        this.route.navigate(['/']);
+
+Onde o array passado por parâmetro representa a rota, nesse caso, a página inicial.
