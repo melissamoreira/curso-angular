@@ -15,8 +15,10 @@ export class CadastroComponent {
     foto: FotoComponent = new FotoComponent();
     service: FotoService; 
     meuForm: FormGroup;
-    router: ActivatedRoute; //Define a parametrização de rotas
-    route: Router;          //Define rotas e navegação
+    router: ActivatedRoute; 
+    route: Router;
+    mensagem: string = '';
+    inclusao: boolean;
     
     constructor (service: FotoService, fb: FormBuilder, 
                  router: ActivatedRoute, route: Router) {
@@ -29,7 +31,6 @@ export class CadastroComponent {
 
                 console.log(params);                
                 let id =  params['id'];
-                        //params é um Object, como por exembplo: { id: "6MQ0svcLil1zCQGx" }
 
                 if (id) {
                     
@@ -58,21 +59,17 @@ export class CadastroComponent {
         event.preventDefault();
         console.log(this.foto);
 
-        let put = (this.foto._id)
-                ? this.route.navigate(['/'])
-                : false;
-                //Navega de volta para a home e for alteração, senão, permanece na página do formulário.
+        this.service.cadastra(this.foto)                    
+                    .subscribe( res => {
 
-        //Utilizando o serviço
-        this.service
-                .cadastra(this.foto)                    
-                .subscribe( () => {
-
-                    this.foto = new FotoComponent();
-                    console.log("Foto salva com sucesso!");
-                    put;
-                    
-                },  erro => console.log(erro));
+                        /* Exibindo a mensagem de forma correta, por meio do tipo MensagemCadastro */
+                        this.mensagem = res.mensagem;
+                        this.foto = new FotoComponent();
+                        if(!res.inclusao) this.route.navigate(['']);
+                        
+                    },  erro => {
+                        console.log(erro);
+                    });
     }
 
 }

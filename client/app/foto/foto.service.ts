@@ -2,7 +2,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { FotoComponent } from './foto.component';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-
+        
 @Injectable ()
 export class FotoService {
 
@@ -22,20 +22,28 @@ export class FotoService {
                         .map( res => res.json());
     }
 
-    cadastra(foto:FotoComponent): Observable <Response> {
+    cadastra(foto:FotoComponent): Observable<MensagemCadastro> {
 
-        /* 
+        /*
+            A função retorna um observable do tipo MensagemCadastro, que indica se foi realizada uma alteração ou nova inserção.
+
             Abaixo, verificamos se a foto já possui id.
             Se possuir, realizamos o put, senão, realizamos o post.
         */
-        return (foto._id)
 
-            ? this.http.put(
+        if (foto._id) {
+
+            return this.http.put(
                 this.url + '/' + foto._id, JSON.stringify(foto),
                 { headers: this.headers })
+                .map(() => new MensagemCadastro('Foto alterada com sucesso!', false));
 
-            : this.http.post(
-                this.url, JSON.stringify(foto), { headers: this.headers });
+        } else  {
+            return this.http.post(
+                this.url, JSON.stringify(foto), { headers: this.headers })
+                .map(() => new MensagemCadastro('Foto inserida com sucesso!', true));    
+
+        }   
 
     }
 
@@ -45,10 +53,38 @@ export class FotoService {
     }
 
     buscar(id: string): Observable<FotoComponent> {
-
-        //Buscando um registro específico por meio do id
+        
         return this.http.get( this.url + "/" + id)
                         .map( res => res.json());
     }
 
+}
+
+/*
+    Foi criada mais uma classe, ou seja, um novo tipo: MensagemCadastro.
+    Assim, a cada inserção ou atualização de registro, o método cadastra() retornará uma mensagem adequada e um booleano indicando se é um alteração ou novo registro.
+    Graças ao TypeScript, pudemos declarar os atributos _mensagem e _inclusao como privados, dessa forma, esses dados não poderão ser modificados depois de criados.
+*/
+
+export class MensagemCadastro {
+
+    /*
+        A declaração dos atributos private pode ocorrer diretamente via parâmetro do constructor, apenas como uma forma de manter o código enxuto.
+    */
+    constructor (private _mensagem: string, private _inclusao: boolean) {
+        this._mensagem = _mensagem;
+        this._inclusao = _inclusao;
+    }
+
+    /*
+        Os métodos get abaixo são public, entretanto, esse é o valor padrão para os atributos e métodos no TS. Não é necessário especificá-lo.
+    */
+
+    public get mensagem (): string {
+        return this._mensagem;
+    }
+
+    public get inclusao (): boolean {
+        return this._inclusao;
+    }
 }

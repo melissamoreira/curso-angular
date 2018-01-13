@@ -4,10 +4,8 @@
 </div>
   
 <div class="container">
-
-    <!-- *ngIf verifica se o tamanho de 'mensagem' é maior que 0, e o exibe se sim. -->
-    <div *ngIf="mensagem.length" class="alert alert-info" role="alert">{{mensagem}}
-    </div>          
+    
+    <p *ngIf="mensagem.length" class="alert alert-info">{{mensagem}}</p>          
 
     <div class="row">
             <div class="col-md-12">
@@ -32,16 +30,12 @@
 
     <div class="row">
         
-        <!-- O component Painel recebe o component Foto como conteúdo e,
-             agora, o ngFor realiza a repetição sobre o Painel -->
-    
        <painel *ngFor="let foto of fotos | filtroPorTitulo:textoProcurado.value" titulo="{{foto.titulo | uppercase }}"
                 class="col-md-2 col-lg-2 col-sm-2 col-xs-4">
             <a [routerLink]="['/cadastro', foto._id]" >
                 <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
             </a>
-
-            <!-- O button chama o método remove com o parâmetro 'foto' (variável do ngFor), ao disparar o evento 'click'. -->
+            
             <button class="btn btn-danger btn-block" 
                     (click)="remove(foto)">Remover</button>
        </painel>

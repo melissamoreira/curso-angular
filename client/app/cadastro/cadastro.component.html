@@ -1,10 +1,10 @@
 <div class="container">
-
-    <!--  Validação de formulário orientada a modelo:  -->
+    
+    <!-- Exibe o obj MensagemCadastro -->
+    <p *ngIf="mensagem.length" class="alert alert-info">{{mensagem}}</p>
     
     <div class="col-md-6">
 
-        <!-- Utilizamos a diretiva formGroup para associar o formulário ao formGroup 'meuForm', criado no componente. -->
         <form [formGroup]="meuForm" class="row" (submit)="cadastrar($event)">
 
             

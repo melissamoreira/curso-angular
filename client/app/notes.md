@@ -193,3 +193,25 @@ Para realizar a navegação via componente (e não pelo template), como um redir
         this.route.navigate(['/']);
 
 Onde o array passado por parâmetro representa a rota, nesse caso, a página inicial.
+
+
+------------------
+
+# Parte2 | Aula 05 - Modificadores de acesso e Encapsulamento
+
+------------------
+
+Em TypeScript podemos usar o tipo **any** para indicar que o tipo retornado é qualquer tipo. Na verdade ele foi adicionados aos tipos deste superset do ES6 para possibilitar sua introdução em sistema legados, quando não há uma maneira clara de especificar o tipo. 
+
+    // código anterior omitido 
+
+    cadastra(foto: FotoComponent): Observable<any> {
+
+       // código omitido  
+    }
+
+
+# Modificadores de acesso
+
+No TypeScript é possível declarar atributos e métodos **private**.
+É uma convenção iniciar o nome de atributos privados com underline, como em **_mensagem**.

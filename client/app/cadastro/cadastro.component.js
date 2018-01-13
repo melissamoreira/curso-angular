@@ -17,13 +17,13 @@ var CadastroComponent = (function () {
     function CadastroComponent(service, fb, router, route) {
         var _this = this;
         this.foto = new foto_component_1.FotoComponent();
+        this.mensagem = '';
         this.service = service;
         this.router = router;
         this.route = route;
         router.params.subscribe(function (params) {
             console.log(params);
             var id = params['id'];
-            //params é um Object, como por exembplo: { id: "6MQ0svcLil1zCQGx" }
             if (id) {
                 service
                     .buscar(id)
@@ -40,18 +40,16 @@ var CadastroComponent = (function () {
         var _this = this;
         event.preventDefault();
         console.log(this.foto);
-        var put = (this.foto._id)
-            ? this.route.navigate(['/'])
-            : false;
-        //Navega de volta para a home e for alteração, senão, permanece na página do formulário.
-        //Utilizando o serviço
-        this.service
-            .cadastra(this.foto)
-            .subscribe(function () {
+        this.service.cadastra(this.foto)
+            .subscribe(function (res) {
+            /* Exibindo a mensagem de forma correta, por meio do tipo MensagemCadastro */
+            _this.mensagem = res.mensagem;
             _this.foto = new foto_component_1.FotoComponent();
-            console.log("Foto salva com sucesso!");
-            put;
-        }, function (erro) { return console.log(erro); });
+            if (!res.inclusao)
+                _this.route.navigate(['']);
+        }, function (erro) {
+            console.log(erro);
+        });
     };
     CadastroComponent = __decorate([
         core_1.Component({
