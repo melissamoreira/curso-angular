@@ -9,6 +9,7 @@ import { CadastroComponent } from './cadastro/cadastro.component';
 import { ListagemComponent } from './listagem/listagem.component';
 import { routing } from './app.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BotaoModule } from './botao/botao.module';
 
 //Um módulo anotado com NgModule pode importar outros módulos anotados com o NgModule
 @NgModule ({
@@ -19,7 +20,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         PainelModule, 
         routing,
         FormsModule,
-        ReactiveFormsModule ], //Imports da aplicação
+        ReactiveFormsModule,
+        BotaoModule ], //Imports da aplicação
     declarations: [ 
         AppComponent, 
         CadastroComponent, 

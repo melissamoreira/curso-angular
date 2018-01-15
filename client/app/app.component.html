@@ -1,4 +1,11 @@
-<router-outlet></router-outlet>
-<!-- Elemento que receberá os componentes carregados condicionalmente por meio das rotas. -->
+<nav class="navbar navbar-default">
+    <ul class="navbar-nav nav">
+        <li><a [routerLink]="['/']">Página Inicial</a></li>
+        <li><a [routerLink]="['/cadastro']">Nova Foto</a></li>
+    </ul>
+</nav>
 
-<!-- A diretiva router-outlet indica o local em que os componentes carregados pelo sistema de rotas do Angular devem ser inseridos dentro de um template. Em nosso caso, como AppComponent passou a ser o primeiro componente a ser carregado em nossa aplicação, é em seu template que usamos a diretiva router-outlet. -->
+<router-outlet></router-outlet>
+
+<!-- Como o menu deve estar presente em todas as telas da aplicação,
+    o inserimos acima da tag router-outlet. Dessa forma, ele estará presente independente de qual template seja renderizado no elemento abaixo. -->

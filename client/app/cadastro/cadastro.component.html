@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" >
     
     <!-- Exibe o obj MensagemCadastro -->
     <p *ngIf="mensagem.length" class="alert alert-info">{{mensagem}}</p>
@@ -59,15 +59,17 @@
                         autocomplete="off">
                     </textarea>
                 </div>
-    
-                <button type="submit" 
-                        class="btn btn-primary" 
-                        [disabled]="meuForm.invalid">
-                    Salvar
-                </button>
-                <!-- Acima, utilizando uma diretiva no atributo disabled, utilizamos a propriedade 'meuForm' de nosso componente para verificar se este está valido ou não. Se não estiver, o botão é desabilitado. --> 
 
-                 <a [routerLink]="['']" class="btn btn-primary">Voltar</a>
+                <!-- Componente Botao -->
+                <botao nome="Salvar" 
+                       tipo="submit"
+                       estilo="btn btn-primary"
+                       [desabilitado]="meuForm.invalid"></botao>
+                       
+                 <!--<a [routerLink]="['']" class="btn btn-primary">Voltar</a>-->
+
+                 <botao nome="Voltar" [routerLink]="['']"></botao>
+                 
                 <hr>
             
         </form>

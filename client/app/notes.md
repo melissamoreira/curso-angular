@@ -215,3 +215,124 @@ Em TypeScript podemos usar o tipo **any** para indicar que o tipo retornado é q
 
 No TypeScript é possível declarar atributos e métodos **private**.
 É uma convenção iniciar o nome de atributos privados com underline, como em **_mensagem**.
+
+------------------
+
+# Parte2 | Aula 06 - Mais componentes / Output / EventEmitter
+
+------------------
+
+## Recapitulando
+
+
+O **Output** é um decorator que permite criarmos eventos customizado, isto é, eventos que não existem na especificação JavaScript. Contudo, precisamos associar o decorator a uma instância de **EventEmitter** do pacte *@angular/core*. 
+
+
+O **selector** de um componente nada mais é do que o nome que utilizaremos para utilizarmos o componente no template de outros componentes. O nome da 'tag' utilizada.
+
+
+O nome de um evento customizado é o nome do atributo decorado com **Output** e que guarda uma instância de **EventEmitter**.
+
+
+O **Input** é um decorator para definir uma *inbound property* de um componente. Em outras palavras, ela permite passarmos valores o selector do componente.
+
+---
+
+## Disparando (Emitindo) um evento!
+
+Temos a seguinte definição do componente abaixo:
+
+    import { Component, Output, EventEmitter } from '@angular/core';
+
+    @Component({
+    selector: 'meuComponente',
+    templateUrl: './meu-component.html'
+    })
+    class MeuComponent { 
+
+    @Output meuEvento = new EventEmitter();
+
+    executaAcao() {
+        // como dispara o evento aqui?
+    }
+    }
+
+No método *executaAcao*, como disparamos o evento *meuEvento*? Ele não receberá nenhum parâmetro. 
+
+    this.meuEvento.emit();
+
+Disparamos um evento que não envia dado algum. É possível passar **null** se assim desejarmos.
+
+Quando um evento é disparado, podemos transferir com o evento um dado. Que tal vermos esse processo para sabermos ainda mais sobre eventos customizado?
+
+Primeiro, vamos definir o tipo do nosso *EventEmitter*. Ele será do tipo *number*. É o tipo que definimos no generic do *EventEmitter* que define o tipo aceito pelo seu método *emit*:
+
+    import { Component, Output, EventEmitter } from '@angular/core';
+
+    @Component({
+    selector: 'meuComponente',
+    templateUrl: './meu-component.html'
+    })
+    class MeuComponent { 
+
+        @Output meuEvento = new EventEmitter<number>(); // tipando o EventEmitter
+
+        executaAcao() {
+            this.meuEvento.emit(10); // como nosso EventEmitter é do tipo number, podemos passar um número. Qualquer outra coisa geraria um erro de compilação.
+        }
+    }
+
+O template do nosso componente.
+
+
+    <button (click)="executaAcao()">Meu botão</button>
+
+Dentro do template de outro componente qualquer, usamos nosso componente através do seu selector:
+
+    <meuComponent (meuEvento)="metodoQualquerdoComponent($event)"></meuComponent>
+
+Veja que o método recebe **$event**. Sendo assim, no método do componente se fizermos:
+
+    metodoQualquerDoComponent(event) {
+
+        alert(event); // exibe 10!
+    }
+
+---
+
+## Para saber mais: enviando dados com o evento
+
+Quando um evento é disparado, podemos transferir com o evento um dado. Quem responder ao evento, terá acesso ao dado. Que tal vermos esse processo para sabermos ainda mais sobre eventos customizados?
+
+Quando disponibilizamos um dado com um evento customizado, é uma boa prática definirmos o tipo da instância de *EventEmitter*. A vantagem disso é que o tipo passado para a generic de *EventEmitter* faz com que o método *emit* aceite apenas dados desse tipo:
+
+    import { Component, Output, EventEmitter } from '@angular/core';
+
+    @Component({
+    selector: 'meuComponente',
+    templateUrl: './meu-component.html'
+    })
+    class MeuComponent { 
+
+        @Output meuEvento = new EventEmitter<number>(); // tipando o EventEmitter
+
+        executaAcao() {
+            this.meuEvento.emit(10); // como nosso EventEmitter é do tipo number, podemos passar um número. Qualquer outra coisa geraria um erro de compilação.
+        }
+    }
+
+O template do nosso componente.
+
+    <!-- meu-component.html -->
+    <button (click)="executaAcao()">Meu botão</button>
+
+Dentro do template de outro componente qualquer, usamos nosso componente através do seu *selector*:
+
+    <meuComponent (meuEvento)="metodoQualquerdoComponent($event)"></meuComponent>
+
+Veja que associamos ao **meuEvento** um método de um componente, no caso aquele cujo template utilizou *meuComponent*. Como meuComponet em sua definição dispara um evento *click* que por debaixo dos panos chama **this.meuEvento.emit(10)**, assim que for disparado, chamará o método definido em meuEvento do nosso componente. Este método tem acesso a *$event*. Sendo assim, no método, *$event* passa a ser o dado que disponibilizamos.
+
+    metodoQualquerDoComponent(event) {
+
+        alert(event); // exibe 10!
+    }
