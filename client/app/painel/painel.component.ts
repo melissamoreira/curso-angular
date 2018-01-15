@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
-    //Import do ViewEncapsulation para possibilitar explicitar o tipo de encapsulamento
-
+import { Component, Input, OnInit, ViewEncapsulation, ElementRef } from "@angular/core";
+import { Element } from "@angular/compiler/src/ml_parser/ast";
+import { elementAt } from "rxjs/operator/elementAt";
+    
 @Component({
     moduleId: module.id,
     selector: 'painel',
@@ -8,14 +9,16 @@ import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
     styleUrls: ['./painel.component.css'],
     encapsulation: ViewEncapsulation.Emulated 
 })
-    /*  
-        O 'styleUrls' especifica um array com os paths para todas as folhas de estilo usadas por tal componente. 
-    
-        Já 'encapsulation' especifica o tipo de encapsulamento que ocorre no componente. O padrão é Emulated, onde é emulado o Shadow Dom, mas também há as opções Native, que utiliza o Shadow Dom nativo do navegador (essa opção não é totalmente segura porque há navegadores que ainda não suportam completamente alguns recursos), e a opção NONE, onde não ocorre encapsulamento e todo o estilo permanece global. */
 
 export class PainelComponent implements OnInit {
 
     @Input () titulo: string;
+    private elemento: ElementRef;
+        //O ElementRef fornece uma REFERÊNCIA ao elemento nativo do DOM
+
+    constructor(elemento: ElementRef) {
+        this.elemento = elemento;            
+    }
 
     ngOnInit () {
         this.titulo = this.titulo.length > 7 
@@ -23,6 +26,12 @@ export class PainelComponent implements OnInit {
             // `${this.titulo.substr(0, 7)}...`
             // Sintaxe alternativa acima, utilizando o template string do ES6
         : this.titulo;
+    }
+
+    fadeOut(callBack) {      
+
+        $(this.elemento.nativeElement).fadeOut(callBack);
+            //Contudo, para lidar com o elemento nativo em si, é preciso utilizar o método 'nativeElement' do ElementRef
     }
 
 }

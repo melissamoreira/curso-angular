@@ -29,8 +29,10 @@
         <br>
 
     <div class="row">
-        
-       <painel *ngFor="let foto of fotos | filtroPorTitulo:textoProcurado.value" titulo="{{foto.titulo | uppercase }}"
+    
+       <!-- Criamos uma nova variável local #painel para indicar o painel em que será realizado o fadeOut na exclusão, e o passamos como segundo parâmetro na chamada do método remove(). -->
+       
+       <painel #painel *ngFor="let foto of fotos | filtroPorTitulo:textoProcurado.value" titulo="{{foto.titulo | uppercase }}"
                 class="col-md-2 col-lg-2 col-sm-2 col-xs-4">
             <a [routerLink]="['/cadastro', foto._id]" >
                 <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
@@ -40,7 +42,7 @@
             <botao nome="Remover"
                    estilo="btn-danger btn-block"
                    confirmacao="true"
-                   (acao)="remove(foto)"></botao>
+                   (acao)="remove(foto, painel)"></botao>
 
        </painel>
     </div>

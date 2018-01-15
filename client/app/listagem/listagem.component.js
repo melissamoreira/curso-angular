@@ -20,16 +20,18 @@ var ListagemComponent = (function () {
         this.service.lista()
             .subscribe(function (fotos) { return _this.fotos = fotos; }, function (erro) { return console.log(erro); });
     }
-    ListagemComponent.prototype.remove = function (foto) {
-        //Recebe um FotoComponent e não retorna nenhum valor
+    ListagemComponent.prototype.remove = function (foto, painel) {
         var _this = this;
         this.service.remove(foto)
             .subscribe(function () {
-            var novasFotos = _this.fotos.slice(0);
-            var index = novasFotos.indexOf(foto);
-            novasFotos.splice(index, 1);
-            _this.fotos = novasFotos;
-            _this.mensagem = "Foto removida com sucesso!";
+            //Realiza o fadeOut do painel primeiro, para depois concluir a exclusão do elemento
+            painel.fadeOut(function () {
+                var novasFotos = _this.fotos.slice(0);
+                var index = novasFotos.indexOf(foto);
+                novasFotos.splice(index, 1);
+                _this.fotos = novasFotos;
+                _this.mensagem = "Foto removida com sucesso!";
+            });
         }, function (erro) {
             console.log(erro);
             _this.mensagem = "Ops! Não foi possível remover a foto.";

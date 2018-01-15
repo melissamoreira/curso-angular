@@ -9,14 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-//Import do ViewEncapsulation para possibilitar explicitar o tipo de encapsulamento
 var PainelComponent = (function () {
-    function PainelComponent() {
+    //O ElementRef fornece uma REFERÊNCIA ao elemento nativo do DOM
+    function PainelComponent(elemento) {
+        this.elemento = elemento;
     }
     PainelComponent.prototype.ngOnInit = function () {
         this.titulo = this.titulo.length > 7
             ? this.titulo.substr(0, 7) + '...'
             : this.titulo;
+    };
+    PainelComponent.prototype.fadeOut = function (callBack) {
+        $(this.elemento.nativeElement).fadeOut(callBack);
+        //Contudo, para lidar com o elemento nativo em si, é preciso utilizar o método 'nativeElement' do ElementRef
     };
     __decorate([
         core_1.Input(), 
@@ -30,7 +35,7 @@ var PainelComponent = (function () {
             styleUrls: ['./painel.component.css'],
             encapsulation: core_1.ViewEncapsulation.Emulated
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [core_1.ElementRef])
     ], PainelComponent);
     return PainelComponent;
 }());
