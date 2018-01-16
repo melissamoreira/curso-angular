@@ -336,3 +336,256 @@ Veja que associamos ao **meuEvento** um método de um componente, no caso aquele
 
         alert(event); // exibe 10!
     }
+
+
+------------------
+
+# Parte2 | Aula 07 - Aproveitando seu conhecimento de jQuery 
+
+------------------
+
+# jQuery com 
+
+Nossa aplicação está cada vez melhor, contudo a remoção de fotos ocorre de maneira abrupta após confirmada. Para deixarmos nossos usuários ainda mais confortáveis com nossa aplicação podemos realizarmos um efeito de *fade out*, aquele no qual a imagem vai se tornando transparente até desaparecer. Podemos até pensar em uma solução 100% Angular combinando CSS dinamicamente, contudo adotaremos uma abordagem diferente.
+
+Não é raro o desenvolvedor front-end que passa a utilizar o framework da Google ter alguma noção de **jQuery**, a biblioteca de manipulação de DOM mais famosa do mercado. Realizar um *fade* não é complicado com jQuery, basta selecionarmos o elemento do DOM que desejamos aplicar o efeito para em seguida chamarmos a função **fadeOut** como no exemplo hipotético abaixo:
+
+    // exemplo hipotético, não entra em nenhum lugar da nossa aplicação.
+    $('div').fadeOut(function() {
+        console.log('Realizou o fade out');
+    });
+
+Apesar da equipe do Angular desencorajar a manipulação direta do DOM em nossa aplicação Angular, pode ser que em determinadas situações ela seja a melhor opção, mesmo que em casos raros. Saber acessar elementos do DOM e integrar nosso código do Angular com jQuery é algo que precisamos ter na manga para qualquer eventualidade, principalmente em sistemas nos quais boa parte das funcionalidades fazem uso do jQuery.
+
+## Baixando o jQuery pelo npm
+
+Primeiro, precisamos baixar a biblioteca do jQuery e podemos fazer isso como npm, assim como fizemos com o Bootstrap. No terminal, e dentro da pasta **/client** vamos executar o comando
+
+    npm install jquery@3.1.1 --save
+
+Como qualquer dependência baixada pelo npm, o jQuery ficará dentro da pasta alurapic/client/node_modules. Vamos importá-lo em /client/index.html:    
+
+    <!doctype html>
+    <html>
+        <head>
+            <base href="/">
+            <title>Alurapic</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width">
+
+            <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+            <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+
+        <!-- importando o jQuery -->
+
+        <script src="node_modules/jquery/dist/jquery.js"></script>
+
+        <!-- outros scripts omitidos -->
+
+
+Como utilizaremos o jQuery? Como nossa foto é exibida dentro *PainelComponent*, que tal adicionarmos um método em sua classe que realiza o *fade out* para nós? Com isso, basta termos uma referência do painel em nosso código para em seguida chamarmos a nossa função. Porém, para que isso seja possível, precisamos ter uma referência do DOM do componente para que possamos manipulá-lo com jQuery.
+
+Podemos solicitar ao sistema de injeção de dependências do Angular o elemento do DOM do nosso componente adicionando no construtor de PainelComponent um elemento do tipo **ElementRef**, só não podemos esquecer de importá-lo do módulo *@angular/core*, caso contrário nosso código não compilará.
+
+## Referência de elemento através de injeção
+
+    import { Component, Input, OnInit, ElementRef } from '@angular/core';
+
+    @Component({
+        moduleId: module.id,
+        selector: 'painel',
+        templateUrl: './painel.component.html',
+        styleUrls: ['./painel.component.css'],
+    })
+    export class PainelComponent implements OnInit {
+
+        @Input() titulo: string;
+        private elemento: ElementRef;
+
+        constructor(elemento: ElementRef) {
+            this.elemento = elemento; 
+        }   
+
+        ngOnInit() {
+            this.titulo = this.titulo.length > 7 ?
+                this.titulo.substr(0, 7) + '...' : 
+                this.titulo;
+        }
+    }
+
+Um elemento do tipo *ElementRef* encapsula o elemento do DOM do nosso componente na propriedade **nativeElement**. Agora, podemos implementar nosso método fadeOut:
+
+
+
+    import { Component, Input, OnInit, ElementRef } from '@angular/core';
+
+    @Component({
+        moduleId: module.id,
+        selector: 'painel',
+        templateUrl: './painel.component.html',
+        styleUrls: ['./painel.component.css'],
+    })
+    export class PainelComponent implements OnInit {
+
+        @Input() titulo: string;
+        private elemento: ElementRef;
+
+        constructor(elemento: ElementRef) {
+            this.elemento = elemento; 
+        }   
+
+        ngOnInit() {
+            this.titulo = this.titulo.length > 7 ?
+                this.titulo.substr(0, 7) + '...' : 
+                this.titulo;
+        }
+
+        fadeOut(cb) {   
+        // erro de compilação! Não entra o $!
+            $(this.elemento.nativeElement).fadeOut(cb);
+        }
+    }
+
+---
+
+## Erro de compilação
+
+
+
+Temos um problema, o compilador TypeScript não consegue encontrar a declaração da variável **$**. Por padrão, o script que carrega o jQuery disponibiliza globalmente a variável $ para que possamos utilizá-lo, contudo o TypeScript considera a variável como não declarada e se recusará em compilar nosso código. Além disso, se escrevermos $ e o operador . o Visual Studio Code (ou seu editor favorito com suporte ao TypeScript) não reconhece nenhuma de suas funções e nem poderia, já que o jQuery foi criado sem TypeScript e não usa qualquer tipagem.
+
+Para podemos trabalhar com bibliotecas que não foram escritas em TypeScript precisamos declarar a API que a biblioteca expõe em TypeScript. É apenas uma declaração sem qualquer implementação, até porque a implementação já existe na biblioteca. O TypeScript chama de "ambient" toda declaração sem implementação, inclusive essas declarações costumam ser definidas em arquivo .d.ts.
+
+A boa notícia é que não precisamos nos preocupar coma declaração de arquivos "ambient". Podemos baixar de um repositórios na Web arquivos .d.ts do jQuery e de outras bibliotecas usadas pela comunidade, tudo através da ferramenta **Typings**. Ela já consta em /client/package.json e por isso já foi baixada para nós.
+
+---
+
+## Definições do jQuery para o TypeScript
+
+Agora, vamos verificar se existe algum arquivo d.ts para o jQuery:
+
+    npm run typings search jquery
+
+Várias outras bibliotecas são listadas e a boa notícia é que realmente existe um arquivo para o jQuery. Agora, vamos baixá-lo, mas usando a seguinte sintaxe:
+
+    node ./node_modules/typings/dist/bin install dt~jquery --global --save
+
+Além do nosso arquivo */client/typings.json* agora conter a definição que baixamos, a pasta */typings* foi criada e dentro dela temos a definição.
+
+É uma boa prática baixar todos as definições de tipos listadas em nosso projeto quando baixamos suas dependências. Para evitarmos esquecer esse passo, podemos executar o comando typing install que baixará todas as definições listadas em typings.json ao término do comando npm installl. É por isso que adicionaremos em alurapic/client/package.json um script de **postinstall**:
+
+    // /client/package.json
+    // código anterior omitido
+      "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "tsc:w": "tsc -w",
+        "start": "npm run tsc:w",
+        "typings": "typings",
+        "postinstall": "typings install" 
+      },
+    // código posterior omitido
+ 
+Excelente! Agora precisamos alterar o método remove do componente *ListagemComponent*. Ele agora deve receber também como parâmetro um PainelComponent contendo o *PainelComponent* da foto que estamos removendo em mãos, podemos chamar seu método fadeOut e assim que o efeito terminar, removemos a foto da lista com a posição que recebemos.
+
+---
+
+
+## Mais template
+    
+    // /client/app/listagem/listagem.component.ts
+    
+    import { Component } from '@angular/core';
+    import { Http } from '@angular/http';
+    import { FotoComponent } from '../foto/foto.component';
+    import { FotoService } from '../foto/foto.service';
+    import { PainelComponent } from '../painel/painel.component';
+    
+    @Component({
+        moduleId: module.id,
+        selector: 'listagem',
+        templateUrl: './listagem.component.html' 
+    })
+    export class ListagemComponent { 
+    
+        fotos: FotoComponent[] = [];
+        service: FotoService;
+        mensagem: string = '';
+    
+        constructor(service: FotoService) {
+            this.service = service;
+    
+            this.service.lista()
+                .subscribe(
+                    fotos => this.fotos = fotos,
+                    erro => console.log(erro)
+                );
+        }
+    
+        remove(foto: FotoComponent, painel: PainelComponent) {
+    
+            this.service
+                .remove(foto)
+                .subscribe(
+                    () => {
+    
+                        painel.fadeOut(() => {
+    
+                            let novasFotos = this.fotos.slice(0);
+                            let indice = novasFotos.indexOf(foto);
+                            novasFotos.splice(indice, 1);
+                            this.fotos = novasFotos;
+                            this.mensagem = 'Foto removida com sucesso';
+                        }); 
+                    }, 
+                    erro => {
+                        console.log(erro);
+                        this.mensagem = 'Não foi possível remover a foto';
+                    }
+                );
+    
+        }
+    }
+    
+## Declarando mais uma vez variáveis no template
+
+Por fim, só precisamos alterar o template de *ListagemComponent* para que passe, além da foto, o painel. Vamos lançar mão mais uma vez da variável local de template. Criaremos uma para termos uma referência para o painel:
+    
+    <!-- /client/app/listagem/listagem.component.html -->
+    
+    <!-- código anterior omitido -->
+    
+    <div class="row">
+        <painel #painel *ngFor="let foto of fotos | filtroPorTitulo: textoProcurado.value" titulo="{{foto.titulo | uppercase}}"  class="col-md-2">
+            <a [routerLink]="['/cadastro', foto._id]">
+                <foto titulo="{{foto.titulo}}" url="{{foto.url}}"></foto>
+            </a>
+            <br>
+            <botao confirmacao="true" nome="Remover" estilo="btn-danger btn-block" (acao)="remove(foto, painel)"></botao>
+        </painel>
+    </div><!-- fim row -->
+    
+---
+    
+# jQuery e outras bibliotecas
+
+Quando usamos uma biblioteca que não foi criada em TypeScript não podemos usar o poder do seu intellisense, inclusive nosso código não compilará pois o TypeScript pode entender que determinada não foi declarada antes. Isso acontece no caso do jQuery, por exemplo, que vive no escopo Global.
+
+Contudo, podemos não só resolver problemas de compilação em nosso sistema com TypeScript, mas ainda lançar mão do intellisense para bibliotecas que não foram criados com TypeScript, tudo através de um:
+
+> arquivo d.ts (Type Definition File)
+
+Nada impede que criadores de bibliotecas do mercado criem seu arquivo **t.ds**, o famoso **Type Definition File**. Este arquivo é completamente isolado do servidor e mapeia para cada função, parâmetros e variáveis tipos em TypeScript. É por isso que podemos usar todo poder do TypeScript com jQuery, contanto que o criado do framework ou terceiros tenham criado o arquivo t.ds.
+
+Aliás, através do utilitário typings baixado através do npm podemos buscar na web os arquivos d.ts de diversas bibliotecas famosas do mercado.
+
+---
+
+# Typings
+
+Temos algumas afirmações sobre os Type Definitions Files.
+
+> a) Podem ser baixados através da ferramenta de typings ou diretamente pela internet.
+
+> b) Pode existir mais de um d.ts para uma mesma biblioteca. O ideal é buscar o mais atualizado para a versão da biblioteca que usamos.
+
+> c) Ajuda a resolver erros de compilação, principalmente quando usamos um artefato no escopo global.

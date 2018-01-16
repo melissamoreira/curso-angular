@@ -20,7 +20,7 @@ var listagem_component_1 = require('./listagem/listagem.component');
 var app_routes_1 = require('./app.routes');
 var forms_1 = require('@angular/forms');
 var botao_module_1 = require('./botao/botao.module');
-//Um módulo anotado com NgModule pode importar outros módulos anotados com o NgModule
+var modal_module_1 = require('./modal/modal.module');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -34,7 +34,8 @@ var AppModule = (function () {
                 app_routes_1.routing,
                 forms_1.FormsModule,
                 forms_1.ReactiveFormsModule,
-                botao_module_1.BotaoModule],
+                botao_module_1.BotaoModule,
+                modal_module_1.ModalModule],
             declarations: [
                 app_component_1.AppComponent,
                 cadastro_component_1.CadastroComponent,

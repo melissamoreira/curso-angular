@@ -10,8 +10,9 @@ import { ListagemComponent } from './listagem/listagem.component';
 import { routing } from './app.routes';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BotaoModule } from './botao/botao.module';
+import { ModalModule } from './modal/modal.module';
+import { ModalComponent } from './modal/modal.component';
 
-//Um módulo anotado com NgModule pode importar outros módulos anotados com o NgModule
 @NgModule ({
     imports: [  
         BrowserModule, 
@@ -21,7 +22,8 @@ import { BotaoModule } from './botao/botao.module';
         routing,
         FormsModule,
         ReactiveFormsModule,
-        BotaoModule ], //Imports da aplicação
+        BotaoModule,
+        ModalModule ], //Imports da aplicação
     declarations: [ 
         AppComponent, 
         CadastroComponent, 

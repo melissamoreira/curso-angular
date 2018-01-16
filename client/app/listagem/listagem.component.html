@@ -1,4 +1,3 @@
-<!-- Passamos todo o conteúdo inicial de AppComponent para ListagemComponent -->
 <div class="jumbotron">
     <h1 class="text-center">Alurapic</h1>
 </div>
@@ -29,20 +28,23 @@
         <br>
 
     <div class="row">
-    
-       <!-- Criamos uma nova variável local #painel para indicar o painel em que será realizado o fadeOut na exclusão, e o passamos como segundo parâmetro na chamada do método remove(). -->
-       
+        
        <painel #painel *ngFor="let foto of fotos | filtroPorTitulo:textoProcurado.value" titulo="{{foto.titulo | uppercase }}"
                 class="col-md-2 col-lg-2 col-sm-2 col-xs-4">
             <a [routerLink]="['/cadastro', foto._id]" >
                 <foto url="{{foto.url}}" titulo="{{foto.titulo}}"></foto>
             </a>
-
-            <!-- Utilização de nosso novo componente Botão -->
+            
             <botao nome="Remover"
                    estilo="btn-danger btn-block"
-                   confirmacao="true"
-                   (acao)="remove(foto, painel)"></botao>
+                   [confirmacao]="false"
+                   (acao)="modal.show()"></botao>
+
+            <!-- Utilizando nosso componente Modal:
+                 Foi inserida uma nova variável local #modal, assim, ao clicar no botao acima, este executa como ação o método show() de modal, chamado por meio da nova variável. -->
+
+            <modal #modal frase="Tem certeza que deseja remover esta foto?" 
+                   (confirma)="remove(foto, painel)" ></modal>
 
        </painel>
     </div>
